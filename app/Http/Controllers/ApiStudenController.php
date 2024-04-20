@@ -6,6 +6,7 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ApiStudenController extends Controller
 {
@@ -114,6 +115,7 @@ class ApiStudenController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $student = Student::find($id);
 
         if(!$student){
@@ -126,11 +128,20 @@ class ApiStudenController extends Controller
 
         $validator = Validator::make($request->all(),[
             "name" => "required|max:255",
-            "email" => "required|email|unique:students",
-            "phone" => "required|digits:10|unique:students",
+            "email" => "required",
+            "phone" => "required|digits:10",
             "language" => "required|in:es,en",
         ]);
 
+        $validator->sometimes(['email', 'phone'],
+        [
+            Rule::unique('students')->ignore($id)
+        ], function ($input) use ($student) {
+            // Aplicar la regla única solo si el email o el teléfono son diferentes a los actuales del estudiante
+            return $input->email !== $student->email || $input->phone !== $student->phone;
+        });
+
+        
         if($validator->fails()){
             $data = [
                 "message" => "Error en la validacion de datos",
@@ -139,11 +150,29 @@ class ApiStudenController extends Controller
             ];
             return response()->json($data,400);
         }
-        $student->name = $request->name;
-        $student->email = $request->email;
-        $student->phone = $request->phone;
-        $student->language = $request->languaje;
+
+        if($student->name != $request->name)
+        {
+            $student->name = $request->name;
+        }
+        
+        if( $student->email != $request->email)
+        {
+            $student->email = $request->email;
+        }
+
+        if( $student->phone != $request->phone)
+        {
+            $student->phone = $request->phone;
+        }
+
+        if($student->language != $request->language)
+        {
+            $student->language = $request->language;
+        }
+
         $student->save();
+
         if(!$student){
             $data = [
                 "message" => "Estudiante no actualizado",
