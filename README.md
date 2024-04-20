@@ -1,66 +1,86 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# API CRUD STUDENTS
+Este es una api sensilla que se encarga de hacer las
+operaciones basicas de una api rest(CREATE, READ, UPDATE, DELETE).
+La estructura de la base de datos es la siguiente (hasta el momento):
+Tabla students que contiene los siguientes campos:
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+- **id**:         Indentificador único del estudiante.
+ - **name**:  el nombre del estudiante.
+ - **email**:  correo electronico del estudiante (desde el backend se valida que sea único).
+ - **phone** :Teléfono móvil del estudiante (desde el backend se valida que sea único).
+ -  **language**: idioma del estudiante siendo **en** para ingles y **es** para español.
 
-## About Laravel
+El endpoint definido es /api/students
+Puedes ver las rutas definidas con el comando:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+    php artisan route:list
+ Rutas:
+ 
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+ 1. Metodo: GET: api/students devuelve una lista de todoos los estudiantes
+      metodo del controlador encargador : students.index › ApiStudenController@index
+      
+2. Metodo POST: api/students este metodo a este ruta se envia el estudiante que se
+    quiere resgistrar en la base de datos,  devuelve el estudiante creado en caso de
+    tener éxito, metodo en el controlador que se encarga de manejar la peticion:   
+    students.store › ApiStudenController@store.
+    
+3. Metodo GET: api/students/{id}  extrae un estiante coinsidente con el id que se pasa en       la url, metodo encargado de manejar la petición: students.show › 
+     ApiStudenController@show
+4. Metodo PUT|PATCH:  api/students/id recive el id del estudiante a modificar y los        campos del estudiante que se quieren modificar (es obligatorio enviar todos los campos aunque no se modifiquen) devuelve el estudiante modificado. El metodo encargado 
+ de manejar la petición es: students.update › ApiStudenController@update
+ 5. Método DELETE : api/students/id recive el id del estudiante a borrar y devuelve un **message** de "estudiante borrado" metodo en el controlador que se encarga de la 
+  petición : students.destroy › ApiStudenController@destroy
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+##  Componentes con los que se desarrollo el proyecto:
+1. Composer version 2.6.3
+2. Laravel Framework 10.48.8
+3. PHP 8.1.17 
+4. MySQL 8.0.30
 
-## Learning Laravel
+## Como instalarlo.
+1. **Clonar el repositorio desde GitHub**:
+       Abre una terminal o línea de comandos y navega al directorio donde deseas clonar el repositorio del proyecto. Luego, ejecuta el siguiente comando para clonar el repositorio desde GitHub:
+         ``  git clone [enlace del repositorio]``
+Reemplaza  ** [enlace del repositorio] **por el enlace de este repositorio.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2. **Instalar dependencias de Composer**: Una vez que el repositorio se haya clonado correctamente, navega al directorio del proyecto Laravel recién creado. Por ejemplo:
+``    cd [nombre del repositorio]``
+Una vez dentro del directorio del proyecto, ejecuta el siguiente comando para instalar las dependencias de Composer:
+``    composer install``
+Este comando descargará e instalará todas las dependencias de PHP necesarias para el proyecto Laravel.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+3. **Copiar el archivo de configuración**: Laravel utiliza un archivo de configuración llamado `.env` para almacenar la configuración de la aplicación, como las credenciales de la base de datos. Copia el archivo `.env.example` y renómbralo a `.env`:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    ``cp .env.example .env``
+Tenga en cuenta que el comando cp en windows no se encuentra disponible para cmd, pero puede utilizar lo desde powershell de windows o si tiene descargado gitbash tambien le funcionaria.
 
-## Laravel Sponsors
+4. **Generar una clave de aplicación**: Ejecuta el siguiente comando para generar una nueva clave de aplicación para tu proyecto Laravel:
+``    php artisan key:generate``
+    Esto generará una clave única para tu aplicación y la almacenará en el archivo `.env`.
+    
+5. **Configurar la base de datos**: Abre el archivo `.env` en un editor de texto y configura las opciones de la base de datos según sea necesario. Asegúrate de configurar los siguientes valores:
+``` DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=nombre_base_de_datos
+    DB_USERNAME=nombre_usuario
+    DB_PASSWORD=contraseña
+```
+Reemplaza `"nombre_base_de_datos"`, `"nombre_usuario"` y `"contraseña"` con los detalles de tu base de datos MySQL.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+7.  **Ejecutar migraciones**: El proyecto Laravel utiliza migraciones de base de datos para crear la tabla sudents, ejecuta las migraciones para crear las tablas en  la base de datos utilizando el siguiente comando:
+``php artisan migrate``
 
-### Premium Partners
+8. **Iniciar el servidor de desarrollo**:
+`` php artisan serve ``
+el comando anterior si te genera una url como la siguiente:
+``http://127.0.0.1:8000`` aqui es en donde se ha montado tu servidor de desarrollo,
+para acceder a las ruta que te muestra todos los estudiantes basta con hacer una
+petecion como la siguiente: 
+`` http://127.0.0.1:8000/api/students``
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Nota: 
+	En mi caso para probar los endpoints utilice Insomnia pero tambien
+	puedes usar postman o cualquier otro.
